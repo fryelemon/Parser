@@ -1,15 +1,31 @@
-import requests
 import pandas as pd
-from bs4 import BeautifulSoup
-from fake_useragent import UserAgent
+from selenium.webdriver import Chrome
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
 
-UserAgent().chrome
+webdriver = Service(r'A:\Код\Parser\Сам_Парсер\chromedriver.exe')
+driver = Chrome(service=webdriver)
 
-page_link = 'https://www.wildberries.ru/catalog/0/search.aspx?search=%D0%BA%D0%BE%D1%80%D0%BC+%D0%B4%D0%BB%D1%8F+%D0%BA%D0%BE%D1%88%D0%B5%D0%BA'
-response = requests.get(page_link)
+pages = 10
 
-html = response.content
 
-soup = BeautifulSoup(html,'html.parser')
+for page in range(1, pages):
 
-print(soup)
+    url = 'https://www.ozon.ru/category/konfety-30695/?page=' + str(page)
+    driver.get(url)
+
+    candies = driver.find_elements(By.CLASS_NAME, 'tile-hover-target')
+
+    for candy in candies:
+        candy.click()
+
+        wait = WebDriverWait(driver, 10)
+        wait.until(lambda driver: driver.find_element(By.TAG_NAME, 'h1').text != 'Конфеты')
+
+        print(driver.find_element(By.TAG_NAME, 'h1').text)
+        driver.get(url)
+        wait.until(lambda driver: driver.find_element(By.TAG_NAME, 'h1').text == 'Конфеты')
+        break
+
+driver.quit()
