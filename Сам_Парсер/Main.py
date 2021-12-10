@@ -1,36 +1,42 @@
-import pandas as pd
+# import pandas as pd
 from selenium.webdriver import Chrome
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
+from time import sleep
 
-webdriver = Service(r'A:\Код\Parser\Сам_Парсер\chromedriver.exe')
-driver = Chrome(service=webdriver)
 
+def go_to_link(link):
+    driver.get(link)
+    WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.ID, 'IdOfMyElement')))
+
+
+chrome = Service(r'A:\Код\Parser\Сам_Парсер\chromedriver.exe')
+driver = Chrome(service=chrome)
 pages = 2
-
-wait = WebDriverWait(driver, 10)
 
 for page in range(1, pages):
     url = 'https://www.ozon.ru/category/konfety-30695/?page=' + str(page)
-    driver.get(url)
-    wait.until(lambda driver: driver.find_element(By.TAG_NAME, 'h1').text == 'Конфеты')
+    go_to_link(url, driver)
 
     candies_link = [0]*36
     for p in range(1,37):
-        candies_link[p - 1] = driver.find_elements(By.XPATH, '/html/body/div[1]/div/div['
-                                                '1]/div[3]/div[2]/div[2]/div[3]/div[1]'
-                                                           '/div/div/div[' + str(p) + ']/a')[0].get_attribute('href')
+        candies_link[p - 1] = driver.find_elements(By.XPATH, '/html/body'
+                                                             '/div[1]/div'
+                                                             '/div[1]/div[3]'
+                                                             '/div[2]/div[2]'
+                                                             '/div[3]/div[1]'
+                                                             '/div/div/div[' + str(p) + ']/a')[0].get_attribute('href')
 
     for candy_link in candies_link:
-        driver.get(candy_link)
-        wait.until(lambda driver: driver.find_element(By.TAG_NAME, 'h1').text != 'Конфеты')
+        driver.delete_all_cookies()
+
+        go_to_link(candy_link, driver)
 
         print(driver.find_element(By.TAG_NAME, 'h1').text)
 
-        driver.get(url)
-        wait.until(lambda driver: driver.find_element(By.TAG_NAME, 'h1').text == 'Конфеты')
-    break
+        sleep(2)
+        go_to_link(url, driver)
 
 driver.quit()
