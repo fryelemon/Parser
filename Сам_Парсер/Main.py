@@ -29,14 +29,17 @@ for page in range(1, pages):
                                                              '/div[3]/div[1]'
                                                              '/div/div/div[' + str(p) + ']/a')[0].get_attribute('href')
 
+    candy_name = []
     for candy_link in candies_link:
         driver.delete_all_cookies()
 
         go_to_link(candy_link, driver)
 
-        print(driver.find_element(By.TAG_NAME, 'h1').text)
+        candy_name.append(driver.find_element(By.TAG_NAME, 'h1').text))
 
         sleep(2)
         go_to_link(url, driver)
+
+
 
 driver.quit()
