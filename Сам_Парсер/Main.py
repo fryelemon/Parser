@@ -1,45 +1,32 @@
-# import pandas as pd
-from selenium.webdriver import Chrome
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from time import sleep
+import source as s
+from time import sleep, time
+import sys
 
 
-def go_to_link(link):
-    driver.get(link)
-    WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.ID, 'IdOfMyElement')))
+if __name__ == '__main__':
+    # headless mod working?
+    headless = False
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "headless":
+            print("Running in headless mode")
+            headless = True
 
+    # Main variables
+    current_page = 1
+    start_time = time()
+    filename = r'Конфеты.xlsx'
 
-chrome = Service(r'A:\Код\Parser\Сам_Парсер\chromedriver.exe')
-driver = Chrome(service=chrome)
-pages = 2
+    # Starting web-driver
+    browser = s.get_driver(headless=headless)
 
-for page in range(1, pages):
-    url = 'https://www.ozon.ru/category/konfety-30695/?page=' + str(page)
-    go_to_link(url, driver)
+    # Scraaaaaaaaaaping
+    while current_page <= 5:
+        print(f'Scraping page: #{current_page}...')
 
-    candies_link = [0]*36
-    for p in range(1,37):
-        candies_link[p - 1] = driver.find_elements(By.XPATH, '/html/body'
-                                                             '/div[1]/div'
-                                                             '/div[1]/div[3]'
-                                                             '/div[2]/div[2]'
-                                                             '/div[3]/div[1]'
-                                                             '/div/div/div[' + str(p) + ']/a')[0].get_attribute('href')
+        current_page += 1
 
-    candy_name = []
-    for candy_link in candies_link:
-        driver.delete_all_cookies()
-
-        go_to_link(candy_link, driver)
-
-        candy_name.append(driver.find_element(By.TAG_NAME, 'h1').text))
-
-        sleep(2)
-        go_to_link(url, driver)
-
-
-
-driver.quit()
+    # Ending script
+    browser.quit()
+    end_time = time()
+    working_time = end_time - start_time
+    print(f'Run time: {working_time}')
