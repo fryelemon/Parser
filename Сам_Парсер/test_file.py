@@ -4,8 +4,6 @@ from bs4 import BeautifulSoup
 from selenium.webdriver.common.by import By
 from time import sleep
 import source
-# from multiprocessing import Pool
-
 
 def go_to_link(link, browser):
     browser.get(link)
@@ -19,14 +17,13 @@ for page in range(1, 2):
     url = 'https://www.ozon.ru/category/konfety-30695/?page=' + str(page)
     go_to_link(url, driver)
 
-    candies_link = []
     while p < 37:
-        candies_link.append(driver.find_elements(By.XPATH, '/html/body/div[1]/div/'
-                                                           'div[1]/div[3]/div[2]/di'
-                                                           'v[2]/div[3]/div[1]/div/d'
-                                                           'iv/div[' + str(p) + ']/a')[0].get_attribute('href'))
+        candies_link = driver.find_elements(
+            By.XPATH, '//*[@id="layoutPage"]/div[1]/div[3]/div[2]/div[2]/div[3]/div[1]/div/div/div/a'
+        )
         p += 1
 
+    print(candies_link[0].get_attribute('href'))
     break
     candy_name = []
     for candy_link in candies_link:
