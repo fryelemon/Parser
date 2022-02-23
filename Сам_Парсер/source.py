@@ -1,15 +1,13 @@
 import pandas as pd
-from bs4 import BeautifulSoup
 from time import sleep
-import regex as re
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support import expected_conditions as EC
+
 
 data = [[], [], [], []]
 indexes = ['name', 'price', 'discount_price', 'rate']
@@ -69,10 +67,22 @@ def parse(browser):
         WebDriverWait(browser, 3).until(EC.presence_of_element_located((By.XPATH, '//*[@id="layoutPage"]/div[1]/div[3]/div[1]/div/div[2]/h1')))
     except TimeoutException:
         print("Loading took too much time!")
-    names = [x.text for x in browser.find_elements(By.XPATH, '//*[@id="layoutPage"]/div[1]/div[3]/div[2]/div[2]/div[3]/div[1]/div/div/div/div[1]/a/span/span')]
-    price = [x.text for x in browser.find_elements(By.XPATH, '//*[@id="layoutPage"]/div[1]/div[3]/div[2]/div[2]/div[3]/div[1]/div/div/div/div[1]/div[1]/span[1]')]
-    discount_price = [x.text for x in browser.find_elements(By.XPATH, '//*[@id="layoutPage"]/div[1]/div[3]/div[2]/div[2]/div[3]/div[1]/div/div/div/div[1]/div[1]/span[2]')]
-    rate = [x.text for x in browser.find_elements(By.XPATH, '//*[@id="layoutPage"]/div[1]/div[3]/div[2]/div[2]/div[3]/div[1]/div/div/div/div[1]/div[2]/a')]
+    names = [x.text for x in browser.find_elements(By.XPATH, '//*[@id="layoutPage"]'
+                                                             '/div[1]/div[3]/div[2]'
+                                                             '/div[2]/div[3]/div[1]'
+                                                             '/div/div/div/div[1]/a/span/span')]
+    price = [x.text for x in browser.find_elements(By.XPATH, '//*[@id="layoutPage"]'
+                                                             '/div[1]/div[3]/div[2]'
+                                                             '/div[2]/div[3]/div[1]'
+                                                             '/div/div/div/div[1]/div[1]/span[1]')]
+    discount_price = [x.text for x in browser.find_elements(By.XPATH, '//*[@id="layoutPage"]'
+                                                                      '/div[1]/div[3]/div[2]'
+                                                                      '/div[2]/div[3]/div[1]'
+                                                                      '/div/div/div/div[1]/div[1]/span[2]')]
+    rate = [x.text for x in browser.find_elements(By.XPATH, '//*[@id="layoutPage"]'
+                                                            '/div[1]/div[3]/div[2]'
+                                                            '/div[2]/div[3]/div[1]'
+                                                            '/div/div/div/div[1]/div[2]/a')]
 
     output = [names, discount_price, price, rate]
 

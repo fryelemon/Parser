@@ -1,7 +1,5 @@
 import source as s
-from time import sleep, time
-import sys
-import pandas as pd
+from time import time
 
 
 if __name__ == '__main__':
