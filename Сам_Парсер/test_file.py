@@ -1,42 +1,14 @@
-from selenium.webdriver import Chrome
-from selenium.webdriver.chrome.service import Service
+import requests
 from bs4 import BeautifulSoup
-from selenium.webdriver.common.by import By
-from time import sleep
-import source
 
-def go_to_link(link, browser):
-    browser.get(link)
+main_url = 'https://www.ozon.ru/product/drazhe-tic-tac-' \
+           'so-vkusom-apelsina-16-g-138860274/?advert=iQe1' \
+           'PJp0D_uGD7xEp_jYNdFgeDufu1wiDeCpVoqeNriLLyEJQDA4-' \
+           'qsPgK-Su1uymiR7W9ovxW1lssyLA_vbZNRUZ2Gvlt26VkWV58' \
+           'h7ZnERkxuVd26KZPPG52Y7Ng6FLFEpXOMOu2MLh5__bu7LXIj' \
+           'qJWaywbOw8kCdASCKN_0W-PM6UVFHGRqilXfcnpaw7JuNGp7' \
+           'gCW9Ka2g8AgnUxitHiUqpHPmzUJ3mIZiomuYre8Nq6B6ahCcIKtMhrIRS0MfmHSPQfDmIkZrnEiz1tXKlZLtJmOGgWDXE85Uo-JDbFoaotbPhrso5x-Yvf5_d4MlzETmLnG5s-4HlKEYuB2Or_s4dsdLhJqS4CF6eNezCuodkYPKlfEIg1GN8JR2iKnd0Qx98Z7F8i1xvymwiHU1Cc6wEd2IcG7eJWZHUi_kbI5kh-Nk4gKxGXoFLpMWRZF0xFpsocGZg1cnCWPiyeV_ElMmBweHbrxxMcEclXBi22JjRJ2qSNzoapA0jhOcf3gx4RJFRRYl7eqxaOM2NbLCJpridVGLzx9stWnzCKMQ&sh=n5jy89pt1g'
+page = requests.get(main_url)
 
-
-chrome = Service(r'A:\Код\Parser\Сам_Парсер\chromedriver.exe')
-driver = Chrome(service=chrome)
-
-for page in range(1, 2):
-    p = 1
-    url = 'https://www.ozon.ru/category/konfety-30695/?page=' + str(page)
-    go_to_link(url, driver)
-
-    while p < 37:
-        candies_link = driver.find_elements(
-            By.XPATH, '//*[@id="layoutPage"]/div[1]/div[3]/div[2]/div[2]/div[3]/div[1]/div/div/div/a'
-        )
-        p += 1
-
-    print(candies_link[0].get_attribute('href'))
-    break
-    candy_name = []
-    for candy_link in candies_link:
-        driver.delete_all_cookies()
-        go_to_link(candy_link, driver)
-
-        candy_name.append(driver.find_element(By.TAG_NAME, 'h1').text)
-
-        sleep(2)
-        go_to_link(url, driver)
-
-    page += 1
-
-#source.to_xlsx(candy_name)
-
-driver.quit()
+soup = BeautifulSoup(page.text, "html.parser")
+print(soup.findAll('body'))

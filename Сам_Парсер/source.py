@@ -1,5 +1,4 @@
 import pandas as pd
-from time import sleep
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -10,13 +9,27 @@ from selenium.webdriver.support import expected_conditions as EC
 
 
 data = [[], [], [], []]
-indexes = ['name', 'price', 'discount_price', 'rate']
+indexes = ['Name', 'Price', 'Discounted price', 'Rate']
 
 
-def run_process(page_number, filename, browser):
+def page_exists(browser, page_number=1):
+    have_connection(browser, page_number)
+    try:
+        WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="layoutPage"]'
+                                                                                   '/div[1]/div[3]/div[2]'
+                                                                                   '/div[2]/div[2]/div[1]'
+                                                                                   '/div/div/div')))
+    except TimeoutException:
+        return False
+    return True
+
+
+def run_process(page_number, browser):
     # wait = WebDriverWait(browser, 2)
+
     if have_connection(browser, page_number):
-        sleep(2)
+        browser.save_screenshot('screenie.png')
+        browser.implicitly_wait(2)  # seconds
         # html = browser.page_source
         return parse(browser)
     else:
@@ -38,6 +51,7 @@ def get_driver():
     options.add_argument("disable-gpu")
     options.add_argument("disable-infobars")
     options.add_argument("--disable-notifications")
+    options.add_argument("--headless")
 
     # initialisation
     driver = webdriver.Chrome(options=options)
@@ -64,7 +78,8 @@ def have_connection(browser, page_number):
 
 def parse(browser):
     try:
-        WebDriverWait(browser, 3).until(EC.presence_of_element_located((By.XPATH, '//*[@id="layoutPage"]/div[1]/div[3]/div[1]/div/div[2]/h1')))
+        WebDriverWait(browser, 3).until(EC.presence_of_element_located((By.XPATH, '//*[@id="layoutPage"]/div[1]'
+                                                                                  '/div[3]/div[1]/div/div[2]/h1')))
     except TimeoutException:
         print("Loading took too much time!")
     names = [x.text for x in browser.find_elements(By.XPATH, '//*[@id="layoutPage"]'

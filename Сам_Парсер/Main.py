@@ -11,10 +11,10 @@ if __name__ == '__main__':
     # Starting web-driver
     browser = s.get_driver()
 
-    # Scraaaaaaaaaaping
-    while current_page <= 10:
+    # Scraping
+    while s.page_exists(browser, current_page) and current_page < 2:
         print(f'Scraping page: #{current_page}...')
-        data = s.run_process(current_page, filename, browser)
+        data = s.run_process(current_page, browser)
         s.build_df(data)
         current_page += 1
 
@@ -23,4 +23,4 @@ if __name__ == '__main__':
     browser.quit()
     end_time = time()
     working_time = end_time - start_time
-    print(f'Run time: {working_time}')
+    print(f'Run time: {round(working_time)} seconds.')
