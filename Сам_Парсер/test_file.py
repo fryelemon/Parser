@@ -1,14 +1,46 @@
-import requests
-from bs4 import BeautifulSoup
+class Factory:
+    working = 'False'
+    Name = 'ND'
+    Employees = []
+    Id = 1
 
-main_url = 'https://www.ozon.ru/product/drazhe-tic-tac-' \
-           'so-vkusom-apelsina-16-g-138860274/?advert=iQe1' \
-           'PJp0D_uGD7xEp_jYNdFgeDufu1wiDeCpVoqeNriLLyEJQDA4-' \
-           'qsPgK-Su1uymiR7W9ovxW1lssyLA_vbZNRUZ2Gvlt26VkWV58' \
-           'h7ZnERkxuVd26KZPPG52Y7Ng6FLFEpXOMOu2MLh5__bu7LXIj' \
-           'qJWaywbOw8kCdASCKN_0W-PM6UVFHGRqilXfcnpaw7JuNGp7' \
-           'gCW9Ka2g8AgnUxitHiUqpHPmzUJ3mIZiomuYre8Nq6B6ahCcIKtMhrIRS0MfmHSPQfDmIkZrnEiz1tXKlZLtJmOGgWDXE85Uo-JDbFoaotbPhrso5x-Yvf5_d4MlzETmLnG5s-4HlKEYuB2Or_s4dsdLhJqS4CF6eNezCuodkYPKlfEIg1GN8JR2iKnd0Qx98Z7F8i1xvymwiHU1Cc6wEd2IcG7eJWZHUi_kbI5kh-Nk4gKxGXoFLpMWRZF0xFpsocGZg1cnCWPiyeV_ElMmBweHbrxxMcEclXBi22JjRJ2qSNzoapA0jhOcf3gx4RJFRRYl7eqxaOM2NbLCJpridVGLzx9stWnzCKMQ&sh=n5jy89pt1g'
-page = requests.get(main_url)
+    def __init__(self, name=Name):
+        super(Factory, self).__init__()
+        self.Name = name
+        print(f'Factory \"{name}\" is created')
 
-soup = BeautifulSoup(page.text, "html.parser")
-print(soup.findAll('body'))
+    def open(self):
+        self.working = True
+        print('Factory is opened')
+
+    def close(self):
+        self.working = False
+        print('Factory is closed')
+
+    def add_employee(self, name):
+        new_worker = Employee(name, self.Id)
+        self.Id += 1
+        self.Employees.append(new_worker)
+
+    def print_employees(self):
+        for man in self.Employees:
+            print(f'{man.Name}, {man.Id}')
+
+
+class Employee:
+    Name = 'ND'
+    Id = 'ND'
+
+    def __init__(self, name=Name, employee_id=Id):
+        super(Employee, self).__init__()
+        self.Name = name
+        self.Id = employee_id
+
+
+factory = Factory('Yep')
+print(factory.Name)
+
+factory.add_employee('John')
+factory.add_employee('Ben')
+
+factory.print_employees()

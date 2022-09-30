@@ -28,7 +28,7 @@ def run_process(page_number, browser):
     # wait = WebDriverWait(browser, 2)
 
     if have_connection(browser, page_number):
-        browser.save_screenshot('screenie.png')
+        # browser.save_screenshot('screenie.png')
         browser.implicitly_wait(2)  # seconds
         # html = browser.page_source
         return parse(browser)
