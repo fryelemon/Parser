@@ -12,7 +12,7 @@ if __name__ == '__main__':
     browser = s.get_driver()
 
     # Scraping
-    while s.page_exists(browser, current_page) and current_page < 2:
+    while s.page_exists(browser, current_page): # and current_page < 2:
         print(f'Scraping page: #{current_page}...')
         data = s.run_process(current_page, browser)
         s.build_df(data)
